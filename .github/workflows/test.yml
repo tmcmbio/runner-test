@@ -25,10 +25,14 @@ jobs:
           NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
           echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
       - name: sns
+        env:
+          NGROK_URL: ${{ steps.ngrok.outputs.NGROK_URL }}
         run: |
-          echo "sns"
-          echo "${{ steps.ngrok.outputs.NGROK_PID }}"
-          echo "${{ steps.ngrok.outputs.NGROK_URL }}"
+          echo "$NGROK_URL"
+          echo "update sns topic to use above URL"
+      - name:
+        run: |
+          echo "run UI tests"
       - name: down
         run: |
           kill "${{ steps.ngrok.outputs.NGROK_PID }}"
