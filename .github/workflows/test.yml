@@ -9,8 +9,12 @@ jobs:
     runs-on: macos-14
     steps:
       - name: up
+        env:
+          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
         run: |
-          brew install ngrok openvpn
+          brew install ngrok
+          # brew install ngrok openvpn
+          ngrok config add-authtoken $NGROK_AUTH_TOKEN
       - name: ngrok
         id: ngrok
         run: |
