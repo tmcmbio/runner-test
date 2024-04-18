@@ -10,18 +10,23 @@ jobs:
     steps:
       - name: up
         run: |
-          echo "setup"
-          # brew install ngrok openvpn
+          brew install ngrok openvpn
       - name: ngrok
+        id: ngrok
         run: |
-          echo "ngrok"
-          # ngrok http 8080 &>/dev/null &
-          # NGROK_PID=$!
-          # sleep 2
-          # NGROK_URL=$(curl --silent --max-time 10 http://127.0.0.1:4040/api/tunnels | grep -Po 'https://[\d\w-]+\.ngrok.io')
+          ngrok http 8080 &>/dev/null &
+          "NGROK_PID=$!
+          echo "NGROK_PID=$NGROK_PID" >> $GITHUB_OUTPUT
+          sleep 2
+          NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+          echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
+
+          kill $NGROK_PID
       - name: sns
         run: |
           echo "sns"
+          echo "${{ steps.ngrok.outputs.NGROK_PID }}"
+          echo "${{ steps.ngrok.outputs.NGROK_URL }}"
       - name: down
         run: |
           echo "kill"
