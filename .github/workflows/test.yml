@@ -1,0 +1,28 @@
+name: Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: macos-latest
+    steps:
+      - name: up
+        run: |
+          echo "setup"
+          # brew install ngrok openvpn
+      - name: ngrok
+        run: |
+          echo "ngrok"
+          # ngrok http 8080 &>/dev/null &
+          # NGROK_PID=$!
+          # sleep 2
+          # NGROK_URL=$(curl --silent --max-time 10 http://127.0.0.1:4040/api/tunnels | grep -Po 'https://[\d\w-]+\.ngrok.io')
+      - name: sns
+        run: |
+          echo "sns"
+      - name: down
+        run: |
+          echo "kill"
+          # kill $NGROK_PID
