@@ -8,31 +8,36 @@ jobs:
     name: Test
     runs-on: macos-14
     steps:
-      - name: up
-        env:
-          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      # - name: up
+      #   env:
+      #     NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      #   run: |
+      #     brew install ngrok
+      #     # brew install ngrok openvpn
+      #     ngrok config add-authtoken $NGROK_AUTH_TOKEN
+      # - name: ngrok
+      #   id: ngrok
+      #   run: |
+      #     ngrok http 8080 &>/dev/null &
+      #     NGROK_PID=$!
+      #     echo "NGROK_PID=$NGROK_PID" >> $GITHUB_OUTPUT
+      #     sleep 2
+      #     NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+      #     echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
+      # - name: sns
+      #   env:
+      #     NGROK_URL: ${{ steps.ngrok.outputs.NGROK_URL }}
+      #   run: |
+      #     echo "$NGROK_URL"
+      #     echo "update sns topic to use above URL"
+      - name: UI test
         run: |
-          brew install ngrok
-          # brew install ngrok openvpn
-          ngrok config add-authtoken $NGROK_AUTH_TOKEN
-      - name: ngrok
-        id: ngrok
-        run: |
-          ngrok http 8080 &>/dev/null &
-          NGROK_PID=$!
-          echo "NGROK_PID=$NGROK_PID" >> $GITHUB_OUTPUT
-          sleep 2
-          NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-          echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
-      - name: sns
-        env:
-          NGROK_URL: ${{ steps.ngrok.outputs.NGROK_URL }}
-        run: |
-          echo "$NGROK_URL"
-          echo "update sns topic to use above URL"
-      - name:
-        run: |
-          echo "run UI tests"
-      - name: down
-        run: |
-          kill "${{ steps.ngrok.outputs.NGROK_PID }}"
+          xcodebuild -project ./SMSTest/SMSTest.xcodeproj \
+                     -scheme SMSTestUITests \
+                     -sdk iphonesimulator \
+                     -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+                     test
+
+      # - name: down
+      #   run: |
+      #     kill "${{ steps.ngrok.outputs.NGROK_PID }}"
