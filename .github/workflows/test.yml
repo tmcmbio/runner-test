@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - name: up
         run: |
@@ -20,8 +20,6 @@ jobs:
           sleep 2
           NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
           echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
-
-          kill $NGROK_PID
       - name: sns
         run: |
           echo "sns"
@@ -29,5 +27,4 @@ jobs:
           echo "${{ steps.ngrok.outputs.NGROK_URL }}"
       - name: down
         run: |
-          echo "kill"
-          # kill $NGROK_PID
+          kill "${{ steps.ngrok.outputs.NGROK_PID }}"
