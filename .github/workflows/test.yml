@@ -15,13 +15,6 @@ jobs:
         id: ngrok
         run: |
           ngrok http 8080 &>/dev/null &
-          "NGROK_PID=$!
-          echo "NGROK_PID=$NGROK_PID" >> $GITHUB_OUTPUT
-          # sleep 2
-          # NGROK_URL=$(curl --silent http://127.0.0.1:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-          # echo "NGROK_URL=$NGROK_URL" >> $GITHUB_OUTPUT
-
-          kill $NGROK_PID
       - name: sns
         run: |
           echo "sns"
