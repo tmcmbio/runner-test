@@ -40,8 +40,9 @@ jobs:
       #     echo "update sns topic to use above URL"
       - name: UI test
         run: |
+          cd ./SMSTest
           /Applications/Xcode_15.3.app/Contents/Developer/usr/bin/xcodebuild 
-            -project ./SMSTest/SMSTest.xcodeproj \
+            -project SMSTest.xcodeproj \
             -scheme SMSTestUITests \
             -sdk iphonesimulator \
             -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
