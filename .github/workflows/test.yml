@@ -8,6 +8,14 @@ jobs:
     name: Test
     runs-on: macos-14
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      # - name: Cache Swift PM
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: .build
+      #     key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}-v3
+      #     restore-keys: ${{ runner.os }}-spm-
       # - name: up
       #   env:
       #     NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
